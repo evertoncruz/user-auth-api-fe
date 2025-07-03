@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState,  } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   display: flex; 
@@ -22,6 +23,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,6 +31,7 @@ const Login = () => {
 
     try {
       await login(email, password);
+      navigate("/")
     } catch (err) {
       console.log(err);
       setError("Email ou senha inválidos");
