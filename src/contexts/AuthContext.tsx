@@ -31,13 +31,18 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     return () => unsubscribe();
   }, []);
 
-  const login = async (email: string, password: string) => {
-    await signInWithEmailAndPassword(auth, email, password);
-  };
+const login = async (email: string, password: string) => {
+  const userCredential = await signInWithEmailAndPassword(auth, email, password);
+  const idToken = await userCredential.user.getIdToken();
 
-  const logout = async () => {
-    await signOut(auth);
-  };
+  // Armazena o token localmente
+  localStorage.setItem("token", idToken);
+};
+
+const logout = async () => {
+  await signOut(auth);
+  localStorage.removeItem("token");
+};
 
   return (
     <AuthContext.Provider value={{ user, login, logout, loading }}>
